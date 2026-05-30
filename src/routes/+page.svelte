@@ -22,8 +22,8 @@
   }
 
   onMount(() => {
-    canvas.width = 800;
-    canvas.height = 600;
+    canvas.width = 1920;
+    canvas.height = 920;
     ctx = canvas.getContext("2d");
   });
 
@@ -76,8 +76,12 @@
       {#if isTopPannelOpen && button === selectedTopPannelButton}
         <div class="absolute top-6 flex flex-col whitespace-nowrap bg-gray-400">
           {#if button === "File"}
-            <button type="button"> Open File </button>
-            <button type="button"> Save File </button>
+            <button disabled type="button" class="text-gray-500">
+              Open File
+            </button>
+            <button disabled type="button" class="text-gray-500">
+              Save File
+            </button>
           {:else if button === "About"}
             <About />
           {/if}
