@@ -25,9 +25,17 @@
 
 <div class="palette left-10 bottom-10">
   <div class="selected-colors">
-    <button class="color" style="background: {color1};" title="color {color1}"
+    <button
+      type="button"
+      class="color"
+      style="background: {color1};"
+      title="Left mouse button color {color1}"
     ></button>
-    <button class="color" style="background: {color2};" title="color {color2}"
+    <button
+      type="button"
+      class="color"
+      style="background: {color2};"
+      title="Right mouse button color {color2}"
     ></button>
   </div>
 
@@ -38,7 +46,7 @@
           <button
             type="button"
             class="color"
-            style="background-color: {color}"
+            style="background: {color}"
             title="color {color}"
             onmousedown={($event) => selectColor($event, color)}
             oncontextmenu={($event) => $event.preventDefault()}
