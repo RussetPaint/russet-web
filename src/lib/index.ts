@@ -1,7 +1,6 @@
 // place files you want to import through the `$lib` alias in this folder.
 
-
- export const paletteRow1 = [
+const paletteRow1 = [
     "#000",
     "#404040",
     "#6B6B6B",
@@ -21,7 +20,7 @@
     "#ff006e",
   ];
 
- export const paletteRow2 = [
+const paletteRow2 = [
     "#fff",
     "#C2C2C2",
     "#949494",
@@ -41,5 +40,5 @@
     "#7f0037",
   ];
 
-
+export const paletteRows = [paletteRow1, paletteRow2];
 
