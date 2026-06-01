@@ -23,7 +23,7 @@
   }
 </script>
 
-<div class="palette left-10 bottom-10">
+<div class="palette">
   <div class="selected-colors">
     <button
       type="button"
@@ -48,8 +48,8 @@
             class="color"
             style="background: {color}"
             title="color {color}"
-            onmousedown={($event) => selectColor($event, color)}
-            oncontextmenu={($event) => $event.preventDefault()}
+            onmousedown={($event: MouseEvent) => selectColor($event, color)}
+            oncontextmenu={($event: MouseEvent) => $event.preventDefault()}
           ></button>
         {/each}
       </div>
@@ -59,10 +59,6 @@
 
 <style>
   @reference "tailwindcss";
-
-  .palette {
-    @apply fixed;
-  }
 
   .selected-colors {
     @apply flex mb-2;

@@ -2,6 +2,7 @@
   import TopPannel from "$lib/components/TopPannel.svelte";
   import Palette from "$lib/components/Palette.svelte";
   import { onMount } from "svelte";
+  import DraggableWindow from "$lib/components/DraggableWindow.svelte";
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
@@ -49,7 +50,7 @@
 </script>
 
 <TopPannel />
-<Palette bind:this={palette} />
+<DraggableWindow><Palette bind:this={palette} /></DraggableWindow>
 
 <div class="flex flex-col">
   <canvas
