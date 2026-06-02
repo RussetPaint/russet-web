@@ -24,6 +24,7 @@
     if (ctx && (lmb || rmb)) {
       ctx.beginPath();
       ctx.strokeStyle = palette.getColor(lmb ? 1 : 2);
+      ctx.lineCap = "round";
       ctx.lineWidth = 5;
       ctx.moveTo(last.x, last.y);
       ctx.lineTo(pos.x, pos.y);
