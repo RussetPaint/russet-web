@@ -1,5 +1,6 @@
 <div class="about">
-  <p>RussetWeb is demo paint (will be)</p>
+  <p>Russet is simple paint powered by Svelte and Tailwind.</p>
+  <p>Created by George Noise (VulpesDust)</p>
 </div>
 
 <style>
