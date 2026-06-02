@@ -1,12 +1,10 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
 
+  let { children, left = 10, right = 1000, top = 1000, bottom = 10 } = $props();
+
   let windowContainerRef: HTMLElement;
   let windowRef: HTMLElement;
-  let leftRef: HTMLElement;
-  let rightRef: HTMLElement;
-  let topRef: HTMLElement;
-  let bottomRef: HTMLElement;
 
   let dragStart: MouseEvent | null;
 
@@ -30,14 +28,12 @@
     window.removeEventListener("mousemove", onMouseMove);
     window.removeEventListener("mouseup", onMouseUp);
 
-    const { left, right, top, bottom } = windowRef.getBoundingClientRect();
-    [windowContainerRef, leftRef, rightRef, topRef, bottomRef].forEach(
-      (el) => (el.style.cssText = ""),
-    );
-    leftRef.style.flex = left.toString();
-    rightRef.style.flex = (window.innerWidth - right).toString();
-    topRef.style.flex = top.toString();
-    bottomRef.style.flex = (window.innerHeight - bottom).toString();
+    const rect = windowRef.getBoundingClientRect();
+    windowContainerRef.style.cssText = "";
+    left = rect.left;
+    right = window.innerWidth - rect.right;
+    top = rect.top;
+    bottom = window.innerHeight - rect.bottom;
   }
 
   onDestroy(() => {
@@ -53,15 +49,15 @@
   onmousedown={onMouseDown}
   class="windowContainer flex"
 >
-  <div bind:this={leftRef} style="flex: 10"></div>
+  <div style="flex: {left}"></div>
   <div class="flex flex-col">
-    <div bind:this={topRef} style="flex: 1000"></div>
+    <div style="flex: {top}"></div>
     <div bind:this={windowRef} class="window">
-      <slot />
+      {@render children?.()}
     </div>
-    <div bind:this={bottomRef} style="flex: 10"></div>
+    <div style="flex: {bottom}"></div>
   </div>
-  <div bind:this={rightRef} style="flex: 1000"></div>
+  <div style="flex: {right}"></div>
 </div>
 
 <style>
