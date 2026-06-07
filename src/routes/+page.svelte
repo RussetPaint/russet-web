@@ -6,7 +6,7 @@
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
-  let lastMousePosition: MouseEvent | null;
+  let lastPointerEvent: MouseEvent | null;
 
   let palette: Palette;
 
@@ -16,33 +16,40 @@
     ctx = canvas.getContext("2d");
   });
 
-  function onmousedown(event: MouseEvent) {
-    lastMousePosition = event;
+  function onpointerdown(event: MouseEvent) {
+    lastPointerEvent = event;
   }
 
-  function onmousemove(event: MouseEvent) {
-    if (!lastMousePosition || (event.buttons !== 1 && event.buttons !== 2)) {
+  function onpointermove(event: PointerEvent) {
+    if (!lastPointerEvent || (event.buttons !== 1 && event.buttons !== 2)) {
       return;
     }
-    const last = getCoords(lastMousePosition ? lastMousePosition : event);
-    const pos = getCoords(event);
+
     const lmb = event.buttons === 1;
     const rmb = event.buttons === 2;
-    if (ctx && (lmb || rmb)) {
-      ctx.beginPath();
-      ctx.strokeStyle = palette.getColor(lmb ? 1 : 2);
-      ctx.lineCap = "round";
-      ctx.lineWidth = 5;
-      ctx.moveTo(last.x, last.y);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
+
+    for (const e of event.getCoalescedEvents()) {
+      const last = getCoords(lastPointerEvent);
+      const pos = getCoords(e);
+
+      if (ctx && (lmb || rmb)) {
+        ctx.beginPath();
+        ctx.strokeStyle = palette.getColor(lmb ? 1 : 2);
+        ctx.lineCap = "round";
+        ctx.lineWidth = 5;
+        ctx.moveTo(last.x, last.y);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+      }
+      lastPointerEvent = e;
     }
 
-    lastMousePosition = event;
+    lastPointerEvent = event;
   }
 
-  function onmouseup() {
-    lastMousePosition = null;
+  function onpointerup(event: PointerEvent) {
+    onpointermove(event);
+    lastPointerEvent = null;
   }
 
   function getCoords(event: MouseEvent) {
@@ -67,9 +74,9 @@
 <div class="flex flex-col">
   <canvas
     bind:this={canvas}
-    {onmouseup}
-    {onmousemove}
-    {onmousedown}
+    {onpointerdown}
+    {onpointermove}
+    {onpointerup}
     oncontextmenu={($event) => $event.preventDefault()}
   ></canvas>
 </div>
