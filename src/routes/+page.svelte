@@ -16,7 +16,14 @@
     ctx = canvas.getContext("2d");
   });
 
-  function draw(event: MouseEvent) {
+  function onmousedown(event: MouseEvent) {
+    lastMousePosition = event;
+  }
+
+  function onmousemove(event: MouseEvent) {
+    if (!lastMousePosition || (event.buttons !== 1 && event.buttons !== 2)) {
+      return;
+    }
     const last = getCoords(lastMousePosition ? lastMousePosition : event);
     const pos = getCoords(event);
     const lmb = event.buttons === 1;
@@ -31,7 +38,11 @@
       ctx.stroke();
     }
 
-    lastMousePosition = lmb || rmb ? event : null;
+    lastMousePosition = event;
+  }
+
+  function onmouseup() {
+    lastMousePosition = null;
   }
 
   function getCoords(event: MouseEvent) {
@@ -56,7 +67,9 @@
 <div class="flex flex-col">
   <canvas
     bind:this={canvas}
-    onmousemove={draw}
+    {onmouseup}
+    {onmousemove}
+    {onmousedown}
     oncontextmenu={($event) => $event.preventDefault()}
   ></canvas>
 </div>
