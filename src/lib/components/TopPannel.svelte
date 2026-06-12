@@ -1,6 +1,8 @@
 <script lang="ts">
   import About from "./About.svelte";
 
+  let { canvas }: { canvas: HTMLCanvasElement } = $props();
+
   let isTopPannelOpen = $state(false);
   let selectedTopPannelButton = $state<string>();
 
@@ -11,6 +13,19 @@
 
   function hoverTopPannel(buttonName: string) {
     selectedTopPannelButton = buttonName;
+  }
+
+  function saveImage() {
+    canvas.toBlob((blob) => {
+      if (!blob) {
+        return;
+      }
+      const link = document.createElement("a");
+      link.download = "new Image.jpg";
+      link.href = URL.createObjectURL(blob);
+      link.click();
+      URL.revokeObjectURL(link.href);
+    });
   }
 </script>
 
@@ -31,9 +46,7 @@
             <button disabled type="button" class="text-gray-500">
               Open File
             </button>
-            <button disabled type="button" class="text-gray-500">
-              Save File
-            </button>
+            <button type="button" onclick={saveImage}> Save File </button>
           {:else if button === "About"}
             <About />
           {/if}

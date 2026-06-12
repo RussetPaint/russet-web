@@ -68,7 +68,7 @@
   }
 </script>
 
-<TopPannel />
+<TopPannel {canvas} />
 <DraggableWindow><Palette bind:this={palette} /></DraggableWindow>
 
 <div class="flex flex-col">
