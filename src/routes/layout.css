@@ -6,3 +6,7 @@ body {
   @apply w-screen h-screen;
   background: gray;
 }
+
+button:not(:disabled) {
+  cursor: pointer;
+}
