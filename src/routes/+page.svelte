@@ -3,11 +3,15 @@
   import Palette from "$lib/components/Palette.svelte";
   import { onMount } from "svelte";
   import DraggableWindow from "$lib/components/DraggableWindow.svelte";
+  import ToolBox from "$lib/components/ToolBox.svelte";
+  import { draw as brush } from "$lib/brush";
+  import { draw as pencil } from "$lib/pencil";
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D | null;
-  let lastPointerEvent: MouseEvent | null;
+  let lastPointerEvent: PointerEvent | null;
 
+  let toolbox: ToolBox;
   let palette: Palette;
 
   onMount(() => {
@@ -16,32 +20,36 @@
     ctx = canvas.getContext("2d");
   });
 
-  function onpointerdown(event: MouseEvent) {
+  function onpointerdown(event: PointerEvent) {
     lastPointerEvent = event;
   }
 
   function onpointermove(event: PointerEvent) {
-    if (!lastPointerEvent || (event.buttons !== 1 && event.buttons !== 2)) {
+    if (
+      !lastPointerEvent ||
+      (event.buttons !== 1 && event.buttons !== 2) ||
+      !ctx
+    ) {
       return;
     }
 
-    const lmb = event.buttons === 1;
-    const rmb = event.buttons === 2;
-
-    for (const e of event.getCoalescedEvents()) {
-      const last = getCoords(lastPointerEvent);
-      const pos = getCoords(e);
-
-      if (ctx && (lmb || rmb)) {
-        ctx.beginPath();
-        ctx.strokeStyle = palette.getColor(lmb ? 1 : 2);
-        ctx.lineCap = "round";
-        ctx.lineWidth = 5;
-        ctx.moveTo(last.x, last.y);
-        ctx.lineTo(pos.x, pos.y);
-        ctx.stroke();
-      }
-      lastPointerEvent = e;
+    switch (toolbox.getTool()) {
+      case "Pencil":
+        pencil({ canvas, ctx, palette, lastPointerEvent, event });
+        break;
+      case "Brush":
+        brush({
+          canvas,
+          ctx,
+          palette,
+          lastPointerEvent,
+          event,
+          lineWidth: 5,
+        });
+        break;
+      case "Eraser":
+        // TODO
+        break;
     }
 
     lastPointerEvent = event;
@@ -51,24 +59,12 @@
     onpointermove(event);
     lastPointerEvent = null;
   }
-
-  function getCoords(event: MouseEvent) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    const { clientX, clientY } = event;
-    let canvasX = (clientX - rect.left) * scaleX;
-    let canvasY = (clientY - rect.top) * scaleY;
-
-    canvasX = Math.min(Math.max(0, canvasX), canvas.width);
-    canvasY = Math.min(Math.max(0, canvasY), canvas.height);
-
-    return { x: canvasX, y: canvasY };
-  }
 </script>
 
 <TopPannel {canvas} />
+<DraggableWindow top={10} bottom={50}>
+  <ToolBox bind:this={toolbox} />
+</DraggableWindow>
 <DraggableWindow><Palette bind:this={palette} /></DraggableWindow>
 
 <div class="flex flex-col">
