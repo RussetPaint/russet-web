@@ -1,5 +1,5 @@
 {
-  description = "Asteroids game dev shell: bitecs + pixi.js (WebGL) + TypeScript + Vite";
+  description = "";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -15,18 +15,18 @@
         };
       in {
         devShells.default = pkgs.mkShell {
-          # Пакеты, доступные в среде разработки
+
           packages = with pkgs; [
             nodejs_24
             typescript
+
+            prettier
           ];
 
-          # Переменные окружения для настройки
           NODE_ENV = "development";
 
-          # Сообщение, которое выводится при входе в окружение
           shellHook = ''
-            echo "Nix Develop работает."
+            echo "Nix Develop works!"
           '';
         };
       });
