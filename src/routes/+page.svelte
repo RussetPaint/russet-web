@@ -61,18 +61,28 @@
   }
 </script>
 
-<TopPannel {canvas} />
-<DraggableWindow top={10} bottom={50}>
-  <ToolBox bind:this={toolbox} />
-</DraggableWindow>
-<DraggableWindow><Palette bind:this={palette} /></DraggableWindow>
+<div class="flex flex-col w-full h-full">
+  <TopPannel {canvas} />
+  <DraggableWindow top={10} bottom={50}>
+    <ToolBox bind:this={toolbox} />
+  </DraggableWindow>
+  <DraggableWindow><Palette bind:this={palette} /></DraggableWindow>
 
-<div class="flex flex-col">
-  <canvas
-    bind:this={canvas}
-    {onpointerdown}
-    {onpointermove}
-    {onpointerup}
-    oncontextmenu={($event) => $event.preventDefault()}
-  ></canvas>
+  <div class="flex flex-1 justify-center items-center">
+    <canvas
+      bind:this={canvas}
+      {onpointerdown}
+      {onpointermove}
+      {onpointerup}
+      oncontextmenu={($event) => $event.preventDefault()}
+    ></canvas>
+  </div>
 </div>
+
+<style>
+  canvas {
+    background-color: #999;
+    max-width: 95%;
+    max-height: 95%;
+  }
+</style>
